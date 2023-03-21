@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block style%}
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: aliceblue;
+        text-align: center;
+    }
+
+    .home__text {
+        font-size: 40px;
+        color: #202033;
+        font-weight: 600;
+        margin-bottom: 2rem;
+    }
+
+    .logout {
+        text-decoration: none;
+        color: azure;
+        padding: .75rem 2rem;
+        font-size: 18px;
+        border-radius: 6px;
+        background-color: #202033;
+    }
+    
+    .logout:hover {
+        opacity: .8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <p class="home__text">Hello {{ name }}</p>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block style %}
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: aliceblue;
+    }
+
+    .login {
+        background-color: #202033;
+        padding: 4rem;
+        border-radius: 8px;
+    }
+
+    .login h1 {
+        text-align: center;
+        color: aliceblue;
+        margin-bottom: 1rem;
+    }
+
+    .login label {
+        display: block;
+        text-align: left;
+        color: aliceblue;
+        margin-bottom: .5rem;
+        font-size: 14px;
+    }
+
+    .login input {
+        margin-bottom: 1rem;
+        padding: .5rem;
+        min-width: 280px;
+        border-radius: 4px;
+        outline: none;
+        border: none;
+    }
+
+    .login button {
+        display: block;
+        margin: 0 auto;
+        background-color: aliceblue;
+        color: #202033;
+        padding: .75rem 2rem;
+        border: none;
+        border-radius: 6px;
+        margin-top: 1rem;
+        cursor: pointer;
+    }
+
+    .try_sign {
+        display: block;
+        text-align: center;
+        font-size: 14px;
+        text-decoration: 14px;
+        color: aliceblue;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login">
+    {% with message = get_flashed_messages() %}
+    {% if message %}
+    <p>{{ message[0] }}</p>
+    {% endif %}
+    {% endwith %}
+    <form method="POST">
+        <h1>Login</h1>
+
+        <label for="email">Email</label>
+        <input type="email" placeholder="Enter your email" name="email" />
+
+        <label>Password</label>
+        <input type="password" placeholder="Enter your password" name="password" />
+
+        <a href="{{ url_for('signup') }}" class="try_sign">Try Signup</a>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+{% endblock %}
