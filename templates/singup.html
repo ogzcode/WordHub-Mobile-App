@@ -2,82 +2,53 @@
 
 {% block style %}
 <style>
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background-color: aliceblue;
-    }
-
-    .signup {
-        background-color: #202033;
-        padding: 4rem;
-        border-radius: 8px;
-    }
-
-    .signup h1 {
-        text-align: center;
-        color: aliceblue;
-        margin-bottom: 1rem;
-    }
-
-    .signup label {
-        display: block;
-        text-align: left;
-        color: aliceblue;
-        margin-bottom: .5rem;
+    label {
         font-size: 14px;
     }
 
-    .signup input {
-        margin-bottom: 1rem;
-        padding: .5rem;
-        min-width: 280px;
-        border-radius: 4px;
+    input {
         outline: none;
-        border: none;
-    }
-
-    .signup button {
-        display: block;
-        margin: 0 auto;
-        background-color: aliceblue;
-        color: #202033;
-        padding: .75rem 2rem;
-        border: none;
-        border-radius: 6px;
-        margin-top: 1rem;
-        cursor: pointer;
-    }
-
-    .try_login {
-        display: block;
-        text-align: center;
-        font-size: 14px;
-        text-decoration: 14px;
-        color: aliceblue;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="signup">
-    <form method="POST">
-        <h1>Sign Up</h1>
+<div class="min-vh-100 d-flex justify-content-center align-items-center bg-light-subtle">
+    <form method="POST" class="shadow px-5 py-4 rounded-4 bg-white">
+        <h1 class="text-center mb-4">Sign Up</h1>
 
-        <label for="username">Name</label>
-        <input type="text" placeholder="Enter your name" name="username" />
+        <div class="mb-3">
+            <label for="username" class="form-label text-body-secondary mb-0">Name</label>
+            <div class="d-flex border justify-content-center rounded-2 p-1">
+                <i class="bi bi-person-fill fs-5 mx-2 text-secondary"></i>
+                <input class="border-0 text-dark" type="text" placeholder="Enter your name" name="username" required/>
+            </div>
+        </div>
 
-        <label for="email">Email</label>
-        <input type="email" placeholder="Enter your email" name="email" />
+        <div class="mb-3">
+            <label for="email" class="form-label text-body-secondary mb-0">Email</label>
+            <div class="d-flex border justify-content-center rounded-2 p-1">
+                <i class="bi bi-envelope-fill fs-5 mx-2 text-secondary"></i>
+                <input class="border-0 text-dark" type="email" placeholder="Enter your email" name="email" required/>
+            </div>
+        </div>
 
-        <label>Password</label>
-        <input type="password" placeholder="Enter your password" name="password" />
+        <div class="mb-3">
+            <label for="password" class="form-label text-body-secondary mb-0">Password</label>
+            <div class="d-flex border justify-content-center rounded-2 p-1">
+                <i class="bi bi-lock-fill fs-5 mx-2 text-secondary"></i>
+                <input class="border-0 text-dark" type="password" placeholder="Enter your password" name="password" required/>
+            </div>
+        </div>
 
-        <a href="{{ url_for('login') }}" class="try_login">Try Login</a>
-
-        <button type="submit" style="margin-top: 1rem;">Sign Up</button>
+        <p class="text-center" style="font-size: 14px;">
+            If you have an account 
+            <a href="{{ url_for('login') }}" class="text-decoration-none my-2 text-primary">Try to login</a>
+        </p>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-outline-dark w-50">Sign Up</button>
+        </div>
     </form>
 </div>
 {% endblock %}
