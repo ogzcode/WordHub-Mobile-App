@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import { useFonts } from 'expo-font';
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { color } from "../style/color";
 import { size } from "../style/size";
 
@@ -16,7 +16,11 @@ export const FontProvider = ({ children }) => {
     });
 
     if (!loaded) {
-        return <ActivityIndicator size={size[16]} color={color["rose"]["500"]}/>;
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <ActivityIndicator size={size[16]} color={color["rose"]["500"]} />
+            </View>
+        )
     }
 
     return (
