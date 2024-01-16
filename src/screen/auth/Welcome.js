@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Pressable } from "react-native"
-import WelcomeSVG from "../../assets/SvgComponents/WelcomeSVG"
+import WelcomeSVG from "../../assets/svgComponents/WelcomeSVG"
 
 import { color } from "../../style/color"
 import { typography } from "../../style/typography"

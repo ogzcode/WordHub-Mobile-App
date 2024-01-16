@@ -7,7 +7,7 @@ export const border = {
         "xl": 12,
         "2xl": 16,
         "3xl": 24,
-        "full": "50%"
+        "full": 500
       },
     "width": {
         "0": 0,

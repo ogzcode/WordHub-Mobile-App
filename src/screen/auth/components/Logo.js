@@ -27,7 +27,8 @@ const style = StyleSheet.create({
         fontFamily: "Comfortaa-Bold",
         fontSize: typography["fontSizes"]["xl"],
         color: color["textLight"][800],
-    }, hubText: {
+    },
+    hubText: {
         color: color["white"],
         backgroundColor: color["rose"][500],
         paddingHorizontal: size["1"],
@@ -38,8 +39,8 @@ const style = StyleSheet.create({
 })
 
 export default function Logo() {
-    return(
-        <View style = { style.headerBox } >
+    return (
+        <View style={style.headerBox} >
             <Image style={style.logoImage} source={require("../../../assets/images/logo.png")} />
             <View style={style.appNameBox}>
                 <Text style={style.appNameText}>Word</Text>
