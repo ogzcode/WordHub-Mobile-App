@@ -11,7 +11,7 @@ const style = StyleSheet.create({
     headerBox: {
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
+        alignItems: "flex-end",
         height: size["16"],
         paddingHorizontal: size["4"],
         paddingTop: size["4"],
@@ -29,7 +29,7 @@ export const CustomHeader = ({ navigation, route }) => {
         <View style={style.headerBox}>
             <Text style={style.routeText}>{route.name}</Text>
             <Pressable onPress={() => {}}>
-                <PersonCircle size={28} color={color["white"]} />
+                <PersonCircle size={32} color={color["white"]} />
             </Pressable>
         </View>
     )

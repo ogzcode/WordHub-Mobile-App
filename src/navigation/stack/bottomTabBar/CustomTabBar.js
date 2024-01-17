@@ -14,26 +14,26 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        backgroundColor: color["white"],
-        height: size["16"]
+        backgroundColor: color["rose"][500],
+        height: size["16"],
     },
     tabIcon: {
         padding: size["3"]
     },
     activeTab: {
-        backgroundColor: color["rose"]["100"],
+        backgroundColor: color["white"],
         borderRadius: border["rounded"]["full"]
     }
 });
 
-const getTabBarIcon = (routeName) => {
+const getTabBarIcon = (routeName, isActive) => {
     switch (routeName) {
         case 'Home':
-            return <House size={28} color={color["rose"]["500"]} />;
+            return <House size={24} color={isActive ? color["rose"][500] : color["white"]} />;
         case 'Saved':
-            return <BookmarkHearth size={26} color={color["rose"]["500"]} />;
+            return <BookmarkHearth size={24} color={isActive ? color["rose"][500] : color["white"]} />;
         default:
-            return <Gift size={26} color={color["rose"]["500"]} />;
+            return <Gift size={24} color={isActive ? color["rose"][500] : color["white"]} />;
     }
 }
 
@@ -61,7 +61,7 @@ export const CustomTabBar = ({ state, navigation }) => {
                             style={[styles.tabIcon, isFocused && styles.activeTab]}
                         >
                             {
-                                getTabBarIcon(route.name)
+                                getTabBarIcon(route.name, isFocused)
                             }
                         </Pressable>
                     );
