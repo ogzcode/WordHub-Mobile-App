@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { color } from '../../../style/color'
 import { size } from '../../../style/size'
 import { typography } from '../../../style/typography'
+import { border } from '../../../style/border'
 
 
 const style = StyleSheet.create({
@@ -11,25 +12,31 @@ const style = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
-        marginTop: size[1],
+        padding: size[4],
+        gap: size[4],
     },
     tabBtn: {
         flex: 1,
         paddingVertical: size[2],
-        paddingHorizontal: size[4],
-    },
-    tabBtnActive: {
-        backgroundColor: color["rose"][100],
+        borderRadius: border["rounded"]["md"],
     },
     tabBtnText: {
         fontFamily: "Comfortaa-Bold",
         fontSize: typography["fontSizes"]["md"],
-        color: color["textDark"][700],
         textAlign: "center",
     },
-    activeTabBtnText: {
-        color: color["rose"][600]
+    exampleBtn: {
+        backgroundColor: color["indigo"][100],
     },
+    exampleBtnText: {
+        color: color["indigo"][800],
+    },
+    definitionBtn: {
+        backgroundColor: color["lightBlue"][100],
+    },
+    definitionBtnText: {
+        color: color["lightBlue"][800],
+    }
 })
 
 
@@ -37,16 +44,16 @@ export const Tabs = ({ tab, onChangeTab}) => {
     return (
         <View style={style.tabBox}>
             <Pressable
-                style={[style.tabBtn, tab === "example" && style.tabBtnActive]}
-                onPress={() => onChangeTab("example")}
+                style={[style.tabBtn, style.exampleBtn]}
+                onPress={() => onChangeTab("Sentences")}
             >
-                <Text style={[style.tabBtnText, tab === 'example' && style.activeTabBtnText]}>Example</Text>
+                <Text style={[style.tabBtnText, style.exampleBtnText]}>Example</Text>
             </Pressable>
             <Pressable
-                style={[style.tabBtn, tab === "definition" && style.tabBtnActive]}
-                onPress={() => onChangeTab("definition")}
+                style={[style.tabBtn, style.definitionBtn]}
+                onPress={() => onChangeTab("Definition")}
             >
-                <Text style={[style.tabBtnText, tab === 'definition' && style.activeTabBtnText]}>Definition</Text>
+                <Text style={[style.tabBtnText, style.definitionBtnText]}>Definition</Text>
             </Pressable>
         </View>
     )
