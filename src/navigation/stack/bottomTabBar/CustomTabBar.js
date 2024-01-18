@@ -16,6 +16,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: color["rose"][500],
         height: size["16"],
+        borderTopLeftRadius: border["rounded"]["3xl"],
+        borderTopRightRadius: border["rounded"]["3xl"],
     },
     tabIcon: {
         padding: size["3"]

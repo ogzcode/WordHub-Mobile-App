@@ -15,6 +15,7 @@ const style = StyleSheet.create({
         height: size["16"],
         paddingHorizontal: size["4"],
         paddingTop: size["4"],
+        paddingBottom: size["2"],
         backgroundColor: color["rose"][500],
     },
     routeText: {

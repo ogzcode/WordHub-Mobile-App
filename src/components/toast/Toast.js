@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
         top: size[4],
         left: size[4],
         right: size[4],
-        backgroundColor: '#fff',
         padding: size[4],
         borderRadius: border["rounded"]["md"],
         borderWidth: 2,
@@ -34,6 +33,7 @@ const styles = StyleSheet.create({
         fontSize: typography["fontSizes"]["md"],
         marginLeft: size[4],
         fontWeight: "500",
+        fontFamily: "Comfortaa-Bold"
     }
 });
 
@@ -70,9 +70,9 @@ export default function Toast() {
         switch (type) {
             case 'success':
                 return { 
-                    borderColor: color["teal"][500],
-                    backgroundColor: color["teal"][50],
-                    color: color["teal"][500]
+                    borderColor: color["emerald"][500],
+                    backgroundColor: color["emerald"][50],
+                    color: color["emerald"][500]
                 };
             case 'error':
                 return { 
@@ -100,7 +100,7 @@ export default function Toast() {
     const getIcon = () => {
         switch (type) {
             case 'success':
-                return <CheckSquareFill size={28} color={color["teal"][500]} />;
+                return <CheckSquareFill size={28} color={color["emerald"][500]} />;
             case 'error':
                 return <XSquareFill size={28} color={color["rose"][500]} />;
             case 'warning':
