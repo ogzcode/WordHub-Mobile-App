@@ -1,11 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getWordsByUserId } from "../../services/word";
+import { getWordsByUserId, deleteWordById, updateSentencesByWordId } from "../../services/word";
 
 export const fetchWords = createAsyncThunk("word/fetchWords", async (userId) => {
     const result = await getWordsByUserId(userId)
     return result.data
+})
+
+export const deleteWord = createAsyncThunk("word/deleteWord", async (id) => {
+    const result = await deleteWordById(id)
+    return id
+})
+
+export const updateSentences = createAsyncThunk("word/updateSentences", async (data) => {
+    const { id, sentences } = data
+    const result = await updateSentencesByWordId(id, sentences)
+    return {
+        id: id,
+        sentences: sentences
+    }
 })
 
 export const wordSlice = createSlice({
@@ -42,6 +56,30 @@ export const wordSlice = createSlice({
                 state.words = action.payload
             })
             .addCase(fetchWords.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+            })
+            .addCase(deleteWord.pending, (state, action) => {
+                state.loading = true
+            })
+            .addCase(deleteWord.fulfilled, (state, action) => {
+                state.loading = false
+                state.words = state.words.filter(word => word.id !== action.payload)
+            })
+            .addCase(deleteWord.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+            })
+            .addCase(updateSentences.pending, (state, action) => {
+                state.loading = true
+            })
+            .addCase(updateSentences.fulfilled, (state, action) => {
+                state.loading = false
+                const { id, sentences } = action.payload
+                const index = state.words.findIndex((item) => item.id === id)
+                state.words[index].sentences = sentences
+            })
+            .addCase(updateSentences.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.error.message
             })

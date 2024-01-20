@@ -6,4 +6,8 @@ export const store = configureStore({
     reducer: {
         word: wordReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 });

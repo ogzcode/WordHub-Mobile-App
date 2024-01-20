@@ -38,3 +38,9 @@ export const filterDetails = (details) => {
         };
     });
 };
+
+export const getRandomWords = (wordList, foundedList) => {
+    const filteredWords = wordList.filter(word => foundedList.includes(word.word) === false);
+    const randomIndex = Math.floor(Math.random() * filteredWords.length);
+    return filteredWords[randomIndex].word;
+}
