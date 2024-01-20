@@ -4,6 +4,8 @@ import { CustomHeader } from './bottomTabBar/CustomHeader';
 
 import Home from '../../screen/home/Home';
 import Saved from '../../screen/saved/Saved';
+import Game from '../../screen/game/Game';
+import Setting from '../../screen/setting/Setting';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +21,8 @@ export default function MainStack() {
         >
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Saved" component={Saved} />
-            <Tab.Screen name="Games" component={Home} />
+            <Tab.Screen name="Games" component={Game} />
+            <Tab.Screen name="Settings" component={Setting} options={{ tabBarVisible: false }} />
         </Tab.Navigator>
     );
 }

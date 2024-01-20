@@ -29,7 +29,6 @@ export default function Auth({ route, navigation }) {
             toast.showToast("Logged in successfully", "success");
         } catch (error) {
             toast.showToast(error.message, "error");
-            console.log("hello", error.message);
         }
     }
 
@@ -40,7 +39,6 @@ export default function Auth({ route, navigation }) {
             toast.showToast("Account created successfully", "success");
         } catch (error) {
             toast.showToast(error.message, "error");
-            console.log("hello", error);
         }
     }
 

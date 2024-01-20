@@ -56,7 +56,7 @@ export default function CustomInput({ value, onChangeText, label, placeholder, c
     
     return (
         <View style={style.container}>
-            <Text style={[style.label, isFocused && style.labelFocused]}>{label}</Text>
+            { label !== "" && <Text style={[style.label, isFocused && style.labelFocused]}>{label}</Text>}
             <TextInput
                 value={value}
                 onChangeText={onChangeText}

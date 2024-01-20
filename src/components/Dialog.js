@@ -15,11 +15,12 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,.2)",
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: size[4],
     },
     inlineBox: {
         backgroundColor: color["white"],
-        width: size[96],
-        maxHeight: size["3/4"],
+        width: "100%",
+        maxHeight: size["2/3"],
         borderRadius: border["rounded"]["md"],
     },
     header: {
@@ -42,7 +43,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function Dialog({ visible, title, children, onClose = () => { }, onSubmit = () => { } }) {
+export default function Dialog({ visible, title, children, onClose = () => { } }) {
+
+    if (!visible) return null;
+
     return (
         <Modal
             animationType='fade'

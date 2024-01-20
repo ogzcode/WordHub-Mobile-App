@@ -10,12 +10,11 @@ import { typography } from '../../../style/typography';
 const style = StyleSheet.create({
     detailsList: {
         marginTop: size[2],
-        paddingHorizontal: size[6],
+        paddingHorizontal: size[4],
     },
     partOfSpeech: {
         fontFamily: "Comfortaa-Bold",
-        fontSize: typography["fontSizes"]["lg"],
-        color: color["textDark"][800],
+        fontSize: typography["fontSizes"]["xl"],
         marginBottom: size[2],
     },
     definition: {
@@ -23,32 +22,32 @@ const style = StyleSheet.create({
         fontFamily: "Comfortaa-Medium",
         fontSize: typography["fontSizes"]["md"],
         color: color["textDark"][800],
-        borderWidth: border["width"][1],
+        borderWidth: border["width"][2],
         borderColor: color["textDark"][800],
-        borderRadius: border["rounded"]["lg"],
+        borderRadius: border["rounded"]["md"],
         padding: size[3],
 
     },
     definitionItem: {
         fontFamily: "Comfortaa-Medium",
         fontSize: typography["fontSizes"]["md"],
-        color: color["textDark"][800],
+        color: color["textDark"][900],
     },
     definitionItemExample: {
-        fontFamily: "Comfortaa-Regular",
+        fontFamily: "Comfortaa-Medium",
         fontSize: typography["fontSizes"]["sm"],
-        color: color["textDark"][500],
+        color: color["textDark"][600],
     }
 })
 
-const getPartOfSpeechColor = (partOfSpeech) => {
+const getColorByPartOfSpeech = (partOfSpeech) => {
     switch (partOfSpeech) {
         case "noun":
             return color["teal"][500]
         case "verb":
             return color["rose"][500]
         case "adjective":
-            return color["teal"][500]
+            return color["primary"][500]
         case "adverb":
             return color["amber"][500]
         case "pronoun":
@@ -71,7 +70,7 @@ const DefinitonItem = ({ definitions, partOfSpeech}) => {
         <FlatList
             data={definitions}
             renderItem={({ item }) =>
-                <View style={[style.definition, { borderColor: getPartOfSpeechColor(partOfSpeech) }]}>
+                <View style={[style.definition, { borderColor: getColorByPartOfSpeech(partOfSpeech) }]}>
                     <Text style={style.definitionItem}>{item.definition}</Text>
                     {
                         item.example && <Text style={style.definitionItemExample}>{item.example}</Text>
@@ -90,7 +89,7 @@ export const DefinitionSide = ({ details }) => {
                 <View style={[style.detailsList]}>
                     <Text style={[
                         style.partOfSpeech,
-                        { color: getPartOfSpeechColor(item.partOfSpeech) }
+                        { color: getColorByPartOfSpeech(item.partOfSpeech) }
                     ]}
                     >{item.partOfSpeech}</Text>
                     <DefinitonItem definitions={item.definitions} partOfSpeech={item.partOfSpeech} />

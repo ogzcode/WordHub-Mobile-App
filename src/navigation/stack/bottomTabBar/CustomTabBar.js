@@ -34,8 +34,10 @@ const getTabBarIcon = (routeName, isActive) => {
             return <House size={24} color={isActive ? color["rose"][500] : color["white"]} />;
         case 'Saved':
             return <BookmarkHearth size={24} color={isActive ? color["rose"][500] : color["white"]} />;
-        default:
+        case "Games":
             return <Gift size={24} color={isActive ? color["rose"][500] : color["white"]} />;
+        default:
+            return null
     }
 }
 
@@ -55,6 +57,10 @@ export const CustomTabBar = ({ state, navigation }) => {
                             navigation.navigate(route.name);
                         }
                     };
+
+                    if (route.name === "Settings") {
+                        return null;
+                    }
 
                     return (
                         <Pressable

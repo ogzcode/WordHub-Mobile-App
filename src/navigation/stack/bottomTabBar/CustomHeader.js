@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Pressable, StyleSheet, Text } from 'react-native';
 
-import { PersonCircle } from "../../../assets/icons/PersonCircle";
+import { Gear } from '../../../assets/icons/Gear';
 
 import { color } from '../../../style/color';
 import { typography } from '../../../style/typography';
@@ -29,8 +29,8 @@ export const CustomHeader = ({ navigation, route }) => {
     return (
         <View style={style.headerBox}>
             <Text style={style.routeText}>{route.name}</Text>
-            <Pressable onPress={() => {}}>
-                <PersonCircle size={32} color={color["white"]} />
+            <Pressable onPress={() => navigation.navigate("Settings")}>
+                <Gear size={24} color={color["white"]} />
             </Pressable>
         </View>
     )

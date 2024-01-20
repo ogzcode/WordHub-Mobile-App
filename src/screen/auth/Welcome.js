@@ -11,6 +11,7 @@ const style = StyleSheet.create({
         flex: 1,
         padding: size["8"],
         justifyContent: "center",
+        alignItems: "center",
         backgroundColor: "white"
     },
     welcomeText: {
@@ -52,7 +53,7 @@ export default function Welcome({ navigation }) {
     }
     return (
         <View style={style.container}>
-            <WelcomeSVG width={360} height={360} />
+            <WelcomeSVG width={320} height={360} />
             <Text style={style.welcomeText}>Welcome</Text>
             <Text style={style.content}>
                 Join us for a fun and effective way to learn new words and practice your sentences.
