@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo } from 'react'
-import { View, StyleSheet, TextInput, ScrollView, Text, Pressable } from 'react-native'
+import React, { useEffect, useMemo, useState } from 'react'
+import { View, StyleSheet, TextInput, ScrollView, Text } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { fetchWords, setSelectedWordAndTab } from '../../store/slice/wordSlice'
+import { fetchWords, setSelectedWordAndTab, updateSentences } from '../../store/slice/wordSlice'
 
 import { useAuth } from "../../context/authContext"
 
@@ -12,6 +12,7 @@ import Loading from '../../components/Loading'
 import Dialog from '../../components/Dialog'
 import SentencesList from './components/SentencesList'
 import { DefinitionSide } from '../home/components/DefinitionSide'
+import NewSentencesForm from './components/NewSentencesForm'
 
 import { color } from '../../style/color'
 import { size } from '../../style/size'
@@ -37,32 +38,20 @@ const style = StyleSheet.create({
         borderWidth: border["width"][1],
         borderColor: color["borderDark"][400],
     },
-    paginateBox: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: size[8],
-        paddingHorizontal: size[4],
-        paddingTop: size[2],
-        paddingBottom: size[4],
-    },
-    paginateBtn: {
-        padding: size[3],
-        borderRadius: border["rounded"]["full"],
-        backgroundColor: color["rose"][50]
-    }
 })
 
 export default function Saved() {
     const { getUser } = useAuth()
     const { words, loading, selectedWord, selectedTab } = useSelector((state) => state.word)
-    const [search, setSearch] = React.useState("")
-    const [modalVisible, setModalVisible] = React.useState(false)
+    const [search, setSearch] = useState("")
+    const [modalVisible, setModalVisible] = useState(false)
+    const [newSentencesVisible, setNewSentencesVisible] = useState(false)
+    const [selectedIdForSentences, setSelectedIdForSentences] = useState(null)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const id = getUser().id
+        const id = getUser()?.id
         dispatch(fetchWords(id))
     }, [])
 
@@ -73,10 +62,9 @@ export default function Saved() {
     }, [selectedWord])
 
     const displayWordData = useMemo(() => {
-        return words
-            .filter((item) => {
-                return item.word.toLowerCase().includes(search.toLowerCase())
-            })
+        return words?.filter((item) => {
+            return item.word.toLowerCase().includes(search.toLowerCase())
+        }) || []
     }, [search, words])
 
     const handleCloseModal = () => {
@@ -84,6 +72,20 @@ export default function Saved() {
         dispatch(setSelectedWordAndTab({ word: null, tab: "" }))
     }
 
+    const handleAddNewSentences = (sentence) => {
+        const wordSentences = words.find((item) => item.id === selectedIdForSentences).sentences
+        let copy = [...wordSentences, sentence]
+        dispatch(updateSentences({ id: selectedIdForSentences, sentences: copy }))
+        setNewSentencesVisible(false)
+        setSelectedIdForSentences(null)
+    }
+
+    const handleDeleteSentences = (sentence) => {
+        const wordSentences = words.find((item) => item.id === selectedWord.id).sentences
+        let copy = [...wordSentences.filter((item) => sentence.includes(item) === false)]
+        dispatch(updateSentences({ id: selectedWord.id, sentences: copy }))
+        handleCloseModal()
+    }
 
     return (
         <View style={style.container}>
@@ -92,12 +94,19 @@ export default function Saved() {
             </View>
             {
                 loading ? <Loading /> :
-                    displayWordData.length > 0 ?
+                    displayWordData?.length > 0 ?
                         <ScrollView style={style.flatList}>
                             {
-                                displayWordData.map((item) => {
+                                displayWordData?.map((item) => {
                                     return (
-                                        <WordCard word={item} key={item.id.toString()} />
+                                        <WordCard
+                                            word={item}
+                                            key={item.id.toString()}
+                                            onOpenNewSentencesDialog={() => {
+                                                setNewSentencesVisible(true)
+                                                setSelectedIdForSentences(item.id)
+                                            }}
+                                        />
                                     )
                                 })
                             }
@@ -108,11 +117,29 @@ export default function Saved() {
             <Dialog visible={modalVisible} title={selectedTab} onClose={handleCloseModal}>
                 {
                     selectedTab === "Sentences" ?
-                        <SentencesList sentences={selectedWord.sentences} />
-                            :
+                        <SentencesList sentences={selectedWord.sentences} onDeleteSentences={handleDeleteSentences} />
+                        :
                         selectedTab === "Definition" ? <DefinitionSide details={selectedWord.details} />
                             : <Text>Something went wrong</Text>
                 }
+            </Dialog>
+            <Dialog
+                visible={newSentencesVisible}
+                title="Add new sentences"
+                onClose={() => {
+                    setNewSentencesVisible(false)
+                    setSelectedIdForSentences(null)
+                }}
+            >
+                {
+                    selectedIdForSentences && <NewSentencesForm
+                        wordId={selectedIdForSentences}
+                        onCancel={() => {
+                            setNewSentencesVisible(false)
+                            setSelectedIdForSentences(null)
+                        }}
+                        onSubmit={handleAddNewSentences}
+                    />}
             </Dialog>
         </View>
     )

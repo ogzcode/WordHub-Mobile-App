@@ -1,9 +1,19 @@
-import React from 'react'
-import { View, Text, StyleSheet, Pressable, FlatList } from 'react-native'
+import { useState } from 'react'
+import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { fetchWords } from '../../../store/slice/wordSlice'
 
 import { VolumeUp } from '../../../assets/icons/VolumeUp'
-import { Tabs } from './Tabs'
+import { Bookmark } from '../../../assets/icons/Bookmark'
+import { BookmarkFill } from '../../../assets/icons/BookmarkFill'
 import { DefinitionSide } from './DefinitionSide'
+
+import { saveWord, deleteWordByName } from '../../../services/word'
+
+import useAudio from "../../../hooks/useAudio"
+import { useAuth } from '../../../context/authContext'
+import { useToast } from "../../../components/toast/useToast"
 
 import { filterDetails, getPhonetics } from '../../../utils/util'
 
@@ -34,12 +44,28 @@ const style = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: size[6],
         paddingVertical: size[2],
+        borderBottomColor: color["borderDark"][200],
+        borderBottomWidth: border["width"][1]
+    },
+    btnBox: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: size[4]
     },
     soundBtn: {
         borderWidth: border["width"][2],
         borderColor: color["rose"][500],
         padding: size[2],
         borderRadius: border["rounded"]["full"]
+    },
+    bookmarkBtn: {
+        borderWidth: border["width"][2],
+        borderColor: color["indigo"][500],
+        padding: size[3],
+        borderRadius: border["rounded"]["full"]
+    },
+    bookmarkActive: {
+        backgroundColor: color["indigo"][500]
     },
     wordText: {
         fontFamily: "Comfortaa-Bold",
@@ -54,9 +80,52 @@ const style = StyleSheet.create({
 })
 
 export default function WordDetails({ word }) {
+    const { getUser } = useAuth();
+    const toast = useToast();
+    const dispatch = useDispatch();
+
     const phonetic = getPhonetics(word?.phonetics);
     const details = filterDetails(word?.meanings);
 
+    const { playSound } = useAudio(phonetic.audio);
+    const [isBookmark, setIsBookmark] = useState(false);
+
+    const handleSaveWord = async () => {
+        const data = {
+            word: word.word,
+            phonetics: phonetic,
+            details: details,
+            user_id: getUser().id,
+            sentences: []
+        }
+
+        if (!isBookmark) {
+            try {
+                await saveWord(data);
+                dispatch(fetchWords(getUser()?.id));
+                setIsBookmark(true);
+                toast.showToast("Word saved successfuly!", "success");
+            } catch (error) {
+                setIsBookmark(false);
+                toast.showToast("Something went wrong!", "error");
+                console.log(error);
+            }
+        }
+        else {
+            try {
+                setIsBookmark(false);
+                await deleteWordByName(data.word);
+                dispatch(fetchWords(getUser()?.id));
+                toast.showToast("Word removed successfuly!", "success");
+            } catch (error) {
+                setIsBookmark(true);
+                toast.showToast("Something went wrong!", "error");
+                console.log(error);
+            }
+        }
+    }
+
+    
     return (
         <View style={style.container}>
             <View style={style.header}>
@@ -64,9 +133,19 @@ export default function WordDetails({ word }) {
                     <Text style={style.wordText}>{word?.word}</Text>
                     <Text style={style.phoneticsText}>{phonetic.text}</Text>
                 </View>
-                <Pressable style={style.soundBtn}>
-                    <VolumeUp size={24} color={color["rose"][500]} />
-                </Pressable>
+                <View style={style.btnBox}>
+                    <Pressable onPress={() => handleSaveWord()} style={[style.bookmarkBtn, isBookmark && style.bookmarkActive]}>
+                        {
+                            isBookmark ?
+                                <BookmarkFill size={18} color={color["white"]} />
+                                :
+                                <Bookmark size={18} color={color["indigo"][500]} />
+                        }
+                    </Pressable>
+                    <Pressable onPress={() => playSound()} style={style.soundBtn}>
+                        <VolumeUp size={24} color={color["rose"][500]} />
+                    </Pressable>
+                </View>
             </View>
             <DefinitionSide details={details} />
         </View>
