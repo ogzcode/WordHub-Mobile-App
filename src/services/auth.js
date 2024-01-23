@@ -18,8 +18,13 @@ const logout = async () => {
     return await supabase.auth.signOut();
 }
 
+const updateUserData = async (data) => {
+    return await supabase.auth.updateUser(data)
+}
+
 export {
     login,
     signup,
     logout,
+    updateUserData,
 };
