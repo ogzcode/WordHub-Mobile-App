@@ -7,6 +7,7 @@ import { useToast } from "../../../components/toast/useToast";
 import { useAuth } from '../../../context/authContext'
 import { fetchWords } from '../../../store/slice/wordSlice'
 import { getRandomWords } from '../../../utils/util'
+import NoData from '../../saved/components/NoData';
 
 import Header from './Header'
 import TopBox from './TopBox'
@@ -36,7 +37,7 @@ export default function Main() {
     const [guess, setGuess] = useState([]);
 
     useEffect(() => {
-        if (words.length === 0) {
+        if (words?.length === 0 || words === null) {
             dispatch(fetchWords(getUser()?.id))
         }
         else {
@@ -77,19 +78,27 @@ export default function Main() {
     }
 
     const getProgressWidth = () => {
-        return (foundWords.length / words.length) * 100;
+        return (foundWords?.length / words.length) * 100;
     }
 
     return (
         <View style={style.container}>
-            <Header
-                progressWidth={getProgressWidth()}
-                wordRate={`${foundWords.length} / ${words.length}`}
-                onNextWord={handleNextWord}
-            />
-            <TopBox wordLength={selectedWord.length} selectedWord={guess} />
-            <Bottombox word={selectedWord} guess={guess} onAddLetter={handleAddLetter} />
-            <Footer onDeleteLetter={deleteLetterFromGuess} onNextWord={handleGuessWord} />
+            {
+                words?.length === 0 || words === null ? (
+                    <NoData />
+                ) : (
+                    <>
+                        <Header
+                            progressWidth={getProgressWidth()}
+                            wordRate={`${foundWords.length} / ${words.length}`}
+                            onNextWord={handleNextWord}
+                        />
+                        <TopBox wordLength={selectedWord.length} selectedWord={guess} />
+                        <Bottombox word={selectedWord} guess={guess} onAddLetter={handleAddLetter} />
+                        <Footer onDeleteLetter={deleteLetterFromGuess} onNextWord={handleGuessWord} />
+                    </>
+                )
+            }
         </View>
     )
 }

@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 
 export default function Bottombox({ word, guess, onAddLetter }) {
     const getShuffleWord = useMemo(() => {
-        return word.split('').sort(() => Math.random() - 0.5);
+        return word?.split('').sort(() => Math.random() - 0.5);
     }, [word]);
 
     const isSelected = (letter, index) => {
