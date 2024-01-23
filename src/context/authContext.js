@@ -26,10 +26,6 @@ export const AuthProvider = ({ children }) => {
         return session?.data.session ?? null;
     }
 
-    if (session === null) {
-        return <Loading />
-    }
-
     return (
         <AuthContext.Provider value={{ session, getUser, getSession }}>
             {children}

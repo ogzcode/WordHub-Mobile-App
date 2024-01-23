@@ -30,7 +30,7 @@ export const CustomHeader = ({ navigation, route }) => {
         <View style={style.headerBox}>
             <Text style={style.routeText}>{route.name}</Text>
             <Pressable onPress={() => navigation.navigate("Settings")}>
-                <Gear size={24} color={color["white"]} />
+                <Gear size={28} color={color["white"]} />
             </Pressable>
         </View>
     )

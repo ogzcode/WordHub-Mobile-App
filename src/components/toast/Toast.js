@@ -28,12 +28,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        gap: size[4],
     },
     message: {
         fontSize: typography["fontSizes"]["md"],
-        marginLeft: size[4],
         fontWeight: "500",
-        fontFamily: "Comfortaa-Bold"
+        fontFamily: "Comfortaa-Bold",
+        maxWidth: "90%",
     }
 });
 

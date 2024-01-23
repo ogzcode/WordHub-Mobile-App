@@ -11,7 +11,7 @@ import { typography } from '../../../style/typography'
 const styles = StyleSheet.create({
     container: {
         padding: size[4],
-        paddingBottom: size[0],
+        paddingBottom: size[4],
     },
     item: {
         paddingVertical: size[3],
