@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TextInput, Pressable } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Pressable, Keyboard } from 'react-native'
 
 import { Search } from "../../../assets/icons/Search"
 
@@ -52,12 +52,19 @@ export const SearchHeader = ({ onSearch }) => {
     const handleSearch = () => {
         onSearch(search)
         setSearch("")
+        Keyboard.dismiss()
     }
 
     return (
         <View style={style.container}>
             <View style={style.searchBox}>
-                <TextInput value={search} onChangeText={setSearch} style={style.input} placeholder="Search" />
+                <TextInput 
+                    value={search} 
+                    onChangeText={setSearch} 
+                    style={style.input} 
+                    placeholder="Search" 
+                    onSubmitEditing={() => handleSearch()}
+                />
                 <Pressable onPress={() => handleSearch()}  style={style.iconBtn}>
                     <Search size={size[6]} color={color["textLight"][700]} />
                 </Pressable>

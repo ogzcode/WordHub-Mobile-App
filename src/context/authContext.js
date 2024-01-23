@@ -1,12 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../supabase";
 import Loading from "../components/Loading";
-import { size } from "../style/size";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [session, setSession] = useState(null);
+    const [session, setSession] = useState("");
 
     useEffect(() => {
         supabase.auth.onAuthStateChange((event, session) => {
@@ -25,6 +24,8 @@ export const AuthProvider = ({ children }) => {
     const getSession = () => {
         return session?.data.session ?? null;
     }
+
+    if (session === "") return <Loading />;
 
     return (
         <AuthContext.Provider value={{ session, getUser, getSession }}>

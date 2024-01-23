@@ -1,20 +1,25 @@
-import React, { useEffect, useRef } from 'react'
-import { View, Text, StyleSheet, Pressable, Animated } from 'react-native'
+import React, { useRef } from 'react'
+import { View, Text, StyleSheet, Pressable, Animated, Alert } from 'react-native'
 import { useDispatch } from 'react-redux'
 
-import { setSelectedWordAndTab, deleteWord } from '../../../store/slice/wordSlice'
+import { deleteWord, updateSentences } from '../../../store/slice/wordSlice'
 import useAudio from '../../../hooks/useAudio'
 
 import { VolumeUp } from '../../../assets/icons/VolumeUp'
 import { BookmarkFill } from '../../../assets/icons/BookmarkFill';
 import { PlusLarge } from '../../../assets/icons/PlusLarge'
-import { ThreeDotsVertical } from '../../../assets/icons/ThreeDotsVertical'
 
 import { color } from '../../../style/color'
 import { size } from '../../../style/size'
 import { border } from '../../../style/border'
 import { typography } from '../../../style/typography'
+
 import { Tabs } from './Tabs'
+import SentencesList from './SentencesList'
+import { DefinitionSide } from '../../home/components/DefinitionSide'
+import Dialog from '../../../components/Dialog'
+import CardHeader from './CardHeader'
+import CustomAlert from '../../../components/CustomAlert'
 
 const style = StyleSheet.create({
     container: {
@@ -33,16 +38,6 @@ const style = StyleSheet.create({
         paddingHorizontal: size[4],
         paddingVertical: size[2],
         position: "relative"
-    },
-    wordText: {
-        fontSize: typography["fontSizes"]["xl"],
-        fontFamily: "Comfortaa-Bold",
-        color: color["gray"][700],
-    },
-    phoneticsText: {
-        fontSize: typography["fontSizes"]["sm"],
-        color: color["gray"][500],
-        fontFamily: "Comfortaa-Regular"
     },
     btnBox: {
         flexDirection: "row",
@@ -67,6 +62,7 @@ const style = StyleSheet.create({
     soundBtn: {
         borderWidth: border["width"][2],
         borderColor: color["rose"][500],
+        backgroundColor: color["rose"][500],
         padding: size[2],
         borderRadius: border["rounded"]["full"]
     },
@@ -83,22 +79,21 @@ const style = StyleSheet.create({
         backgroundColor: color["teal"][500],
         padding: size[2],
         borderRadius: border["rounded"]["full"]
-    },
-    dropdownBtn: {
-        padding: size[2],
-        borderRadius: border["rounded"]["full"],
-        backgroundColor: color["backgroundDark"][100]
     }
 })
 
 export default function WordCard({ word, onOpenNewSentencesDialog }) {
     const { playSound } = useAudio(word?.phonetics?.audio || null)
     const [visible, setVisible] = React.useState(false)
+    const [selectedTab, setSelectedTab] = React.useState("")
+    const [dialogVisible, setDialogVisible] = React.useState(false)
+    const [alertVisible, setAlertVisible] = React.useState(false)
     const dispatch = useDispatch()
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     const handleTab = (tab) => {
-        dispatch(setSelectedWordAndTab({ word, tab }))
+        setSelectedTab(tab)
+        setDialogVisible(true)
     }
 
     const handleDeleteWord = () => {
@@ -122,16 +117,22 @@ export default function WordCard({ word, onOpenNewSentencesDialog }) {
         }
     };
 
+    const handleDeleteSentences = (sentence) => {
+        const wordSentences = word.sentences
+        let copy = [...wordSentences.filter((item) => sentence.includes(item) === false)]
+        dispatch(updateSentences({ id: word.id, sentences: copy }))
+        handleCloseModal()
+    }
+
+    const handleCloseModal = () => {
+        setDialogVisible(false)
+        setSelectedTab("")
+    }
+
     return (
         <View style={style.container}>
             <View style={style.header}>
-                <View>
-                    <Text style={style.wordText}>{word?.word}</Text>
-                    <Text style={style.phoneticsText}>{word?.phonetics?.text || ""}</Text>
-                </View>
-                <Pressable onPress={handleShow} style={style.dropdownBtn}>
-                    <ThreeDotsVertical size={28} color={color["backgroundDark"][600]} />
-                </Pressable>
+                <CardHeader word={word?.word} phoneticText={word?.phonetics?.text} onShowDropdown={handleShow} />
                 <Animated.View
                     style={[
                         style.btnBox,
@@ -143,16 +144,32 @@ export default function WordCard({ word, onOpenNewSentencesDialog }) {
                     <Pressable onPress={() => onOpenNewSentencesDialog()} style={style.plusBtn}>
                         <PlusLarge size={28} color={color["white"]} />
                     </Pressable>
-                    <Pressable onPress={() => handleDeleteWord()} style={[style.bookmarkBtn, style.bookmarkActive]}>
+                    <Pressable onPress={() => setAlertVisible(true)} style={[style.bookmarkBtn, style.bookmarkActive]}>
                         <BookmarkFill size={18} color={color["white"]} />
                     </Pressable>
                     <Pressable onPress={() => playSound()} style={style.soundBtn}>
-                        <VolumeUp size={24} color={color["rose"][500]} />
+                        <VolumeUp size={24} color={color["white"]} />
                     </Pressable>
                 </Animated.View>
 
             </View>
             <Tabs onChangeTab={handleTab} />
+            <Dialog visible={dialogVisible} title={selectedTab} onClose={handleCloseModal}>
+                {
+                    selectedTab === "Sentences" ?
+                        <SentencesList sentences={word.sentences} onDeleteSentences={handleDeleteSentences} />
+                        :
+                        selectedTab === "Definition" ? <DefinitionSide details={word.details} />
+                            : <Text>Something went wrong</Text>
+                }
+            </Dialog>
+            <CustomAlert 
+                title="Delete word"
+                content="Are you sure you want to delete this word?"
+                visible={alertVisible} 
+                onClose={() => setAlertVisible(false)} 
+                onSubmit={handleDeleteWord}
+            />
         </View>
     )
 }

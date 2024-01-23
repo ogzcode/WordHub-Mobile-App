@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { View, StyleSheet, TextInput, ScrollView, Text } from 'react-native'
+import { View, StyleSheet, TextInput, ScrollView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { fetchWords, setSelectedWordAndTab, updateSentences } from '../../store/slice/wordSlice'
+import { fetchWords, updateSentences } from '../../store/slice/wordSlice'
 
 import { useAuth } from "../../context/authContext"
 
@@ -10,8 +10,6 @@ import NoData from './components/NoData'
 import WordCard from './components/WordCard'
 import Loading from '../../components/Loading'
 import Dialog from '../../components/Dialog'
-import SentencesList from './components/SentencesList'
-import { DefinitionSide } from '../home/components/DefinitionSide'
 import NewSentencesForm from './components/NewSentencesForm'
 
 import { color } from '../../style/color'
@@ -42,9 +40,8 @@ const style = StyleSheet.create({
 
 export default function Saved() {
     const { getUser } = useAuth()
-    const { words, loading, selectedWord, selectedTab } = useSelector((state) => state.word)
+    const { words, loading } = useSelector((state) => state.word)
     const [search, setSearch] = useState("")
-    const [modalVisible, setModalVisible] = useState(false)
     const [newSentencesVisible, setNewSentencesVisible] = useState(false)
     const [selectedIdForSentences, setSelectedIdForSentences] = useState(null)
 
@@ -55,22 +52,11 @@ export default function Saved() {
         dispatch(fetchWords(id))
     }, [])
 
-    useEffect(() => {
-        if (selectedWord) {
-            setModalVisible(true)
-        }
-    }, [selectedWord])
-
     const displayWordData = useMemo(() => {
         return words?.filter((item) => {
             return item.word.toLowerCase().includes(search.toLowerCase())
         }) || []
     }, [search, words])
-
-    const handleCloseModal = () => {
-        setModalVisible(false)
-        dispatch(setSelectedWordAndTab({ word: null, tab: "" }))
-    }
 
     const handleAddNewSentences = (sentence) => {
         const wordSentences = words.find((item) => item.id === selectedIdForSentences).sentences
@@ -78,13 +64,6 @@ export default function Saved() {
         dispatch(updateSentences({ id: selectedIdForSentences, sentences: copy }))
         setNewSentencesVisible(false)
         setSelectedIdForSentences(null)
-    }
-
-    const handleDeleteSentences = (sentence) => {
-        const wordSentences = words.find((item) => item.id === selectedWord.id).sentences
-        let copy = [...wordSentences.filter((item) => sentence.includes(item) === false)]
-        dispatch(updateSentences({ id: selectedWord.id, sentences: copy }))
-        handleCloseModal()
     }
 
     return (
@@ -114,15 +93,6 @@ export default function Saved() {
                         :
                         <NoData />
             }
-            <Dialog visible={modalVisible} title={selectedTab} onClose={handleCloseModal}>
-                {
-                    selectedTab === "Sentences" ?
-                        <SentencesList sentences={selectedWord.sentences} onDeleteSentences={handleDeleteSentences} />
-                        :
-                        selectedTab === "Definition" ? <DefinitionSide details={selectedWord.details} />
-                            : <Text>Something went wrong</Text>
-                }
-            </Dialog>
             <Dialog
                 visible={newSentencesVisible}
                 title="Add new sentences"

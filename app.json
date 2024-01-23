@@ -4,7 +4,7 @@
     "slug": "dictionary-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/dictionarySplash.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -19,12 +19,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/dictionarySplash.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ogzcode.dictionaryapp"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/dictionarySplash.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "73976f54-6dfb-4e53-8499-409963b33f73"
+      }
     }
   }
 }

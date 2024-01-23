@@ -27,9 +27,7 @@ export const wordSlice = createSlice({
     initialState: {
         words: [],
         loading: true,
-        error: null,
-        selectedWord: null,
-        selectedTab: ""
+        error: null
     },
     reducers: {
         setWords: (state, action) => {
@@ -40,11 +38,7 @@ export const wordSlice = createSlice({
         },
         setError: (state, action) => {
             state.error = action.payload
-        },
-        setSelectedWordAndTab: (state, action) => {
-            state.selectedWord = action.payload.word
-            state.selectedTab = action.payload.tab
-        },
+        }
     },
     extraReducers(builder) {
         builder
@@ -86,6 +80,6 @@ export const wordSlice = createSlice({
     }
 })
 
-export const { setWords, setLoading, setError, setSelectedWordAndTab } = wordSlice.actions
+export const { setWords, setLoading, setError } = wordSlice.actions
 
 export default wordSlice.reducer
