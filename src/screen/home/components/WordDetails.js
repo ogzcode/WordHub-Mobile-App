@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -89,6 +89,10 @@ export default function WordDetails({ word }) {
 
     const { playSound } = useAudio(phonetic.audio);
     const [isBookmark, setIsBookmark] = useState(false);
+
+    useEffect(() => {
+        setIsBookmark(false);
+    }, [word])
 
     const handleSaveWord = async () => {
         const data = {
