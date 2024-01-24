@@ -40,6 +40,8 @@ Uygulamayı Emülatörünüzde Expo uygulamasında çalıştırabilirsiniz.
 
 
 ### Video
+https://github.com/ogzcode/WordHub-Mobile-App/assets/58819819/ad60b9ce-fcc5-4fca-9182-96064f8d223c
+
 
 ## Lisans
 
