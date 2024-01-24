@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { View, StyleSheet, TextInput, ScrollView } from 'react-native'
+import { View, StyleSheet, TextInput, ScrollView, RefreshControl } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { fetchWords, updateSentences } from '../../store/slice/wordSlice'
@@ -44,6 +44,7 @@ export default function Saved() {
     const [search, setSearch] = useState("")
     const [newSentencesVisible, setNewSentencesVisible] = useState(false)
     const [selectedIdForSentences, setSelectedIdForSentences] = useState(null)
+    const [refreshing, setRefreshing] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -51,6 +52,13 @@ export default function Saved() {
         const id = getUser()?.id
         dispatch(fetchWords(id))
     }, [])
+
+    const onRefresh = () => {
+        setRefreshing(true)
+        const id = getUser()?.id
+        dispatch(fetchWords(id))
+        setRefreshing(false)
+    }
 
     const displayWordData = useMemo(() => {
         return words?.filter((item) => {
@@ -73,25 +81,27 @@ export default function Saved() {
             </View>
             {
                 loading ? <Loading /> :
-                    displayWordData?.length > 0 ?
-                        <ScrollView style={style.flatList}>
-                            {
-                                displayWordData?.map((item) => {
-                                    return (
-                                        <WordCard
-                                            word={item}
-                                            key={item.id.toString()}
-                                            onOpenNewSentencesDialog={() => {
-                                                setNewSentencesVisible(true)
-                                                setSelectedIdForSentences(item.id)
-                                            }}
-                                        />
-                                    )
-                                })
-                            }
-                        </ScrollView>
-                        :
-                        <NoData />
+                    <ScrollView style={style.flatList} refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh}
+                            progressBackgroundColor={color["rose"][500]}
+                            colors={[color["white"]]}
+                        />
+                    }>
+                        {
+                            displayWordData?.length > 0 ? displayWordData?.map((item) => {
+                                return (
+                                    <WordCard
+                                        word={item}
+                                        key={item.id.toString()}
+                                        onOpenNewSentencesDialog={() => {
+                                            setNewSentencesVisible(true)
+                                            setSelectedIdForSentences(item.id)
+                                        }}
+                                    />
+                                )
+                            }) : <NoData />
+                        }
+                    </ScrollView>
             }
             <Dialog
                 visible={newSentencesVisible}

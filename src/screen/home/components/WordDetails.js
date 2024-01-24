@@ -81,6 +81,7 @@ const style = StyleSheet.create({
 
 export default function WordDetails({ word }) {
     const { getUser } = useAuth();
+    const words = useSelector(state => state.word.words);
     const toast = useToast();
     const dispatch = useDispatch();
 
@@ -92,6 +93,10 @@ export default function WordDetails({ word }) {
 
     useEffect(() => {
         setIsBookmark(false);
+        const isExist = words.find(item => item.word === word.word);
+        if (isExist) {
+            setIsBookmark(true);
+        }
     }, [word])
 
     const handleSaveWord = async () => {
@@ -99,7 +104,7 @@ export default function WordDetails({ word }) {
             word: word.word,
             phonetics: phonetic,
             details: details,
-            user_id: getUser().id,
+            user_id: getUser()?.id,
             sentences: []
         }
 

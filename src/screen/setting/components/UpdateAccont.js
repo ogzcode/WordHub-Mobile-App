@@ -52,7 +52,7 @@ const style = StyleSheet.create({
     },
     logoutBtn: {
         backgroundColor: color["red"][100],
-        paddingHorizontal: size["3"],
+        paddingHorizontal: size["4"],
         paddingVertical: size["1"],
         borderRadius: border["rounded"]["md"],
     },

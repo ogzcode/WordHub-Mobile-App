@@ -67,7 +67,7 @@ export default function CustomAlert({
     visible, 
     title, 
     content,
-    submitText = "Submit",
+    submitText = "OK",
     cancelText = "Cancel", 
     onClose = () => { }, onSubmit = () => { } }) {
     if (!visible) return null;

@@ -13,12 +13,12 @@ export const AuthProvider = ({ children }) => {
         })
 
         supabase.auth.getSession().then((session) => {
-            setSession(session);
+            setSession(session.data.session);
         })
     }, []);
 
     const getUser = () => {
-        return session?.data?.session?.user || null;
+        return session?.user || null;
     }
 
     const getSession = () => {
