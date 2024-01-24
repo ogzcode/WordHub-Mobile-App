@@ -77,7 +77,6 @@ export default function UpdateAccont() {
         }
 
         const res = await updateUserData({ password: password });
-        console.log(res);
         if (!res.error) {
             toast.showToast("Update Password Success", "success");
         }
